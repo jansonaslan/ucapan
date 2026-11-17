@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For My Love</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --ink: #8e2f5d;
+      --accent: #ff8fab;
+      --rose: #ffb7ce;
+      --rose-dark: #d45a7e;
+      --gold: #d4af37;
+      --shadow: rgba(142, 47, 93, 0.12);
+      --glass: rgba(255, 255, 255, 0.7);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-gradient);
+      font-family: "Segoe UI", "Quicksand", "Nunito", "Comic Sans MS", cursive, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      user-select: none;
+    }
+
+    /* ---------- Floating hearts & petals ---------- */
+    .floating {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .floating-item {
+      position: absolute;
+      font-size: 20px;
+      color: rgba(255, 130, 171, 0.5);
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1) rotate(15deg); opacity: 0; }
+    }
+
+    /* ---------- Stage ---------- */
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      color: var(--ink);
+      margin-bottom: 8px;
+      text-shadow: 0 2px 12px var(--shadow);
+      letter-spacing: 3px;
+      animation: fadeInDown 1s ease both;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #b76e8a;
+      margin-bottom: 40px;
+      animation: fadeInDown 1.2s ease both;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------- Doll (CSS Art) ---------- */
+    .doll {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      margin-bottom: 30px;
+      z-index: 2;
+      animation: bob 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+
+    .doll-head {
+      width: 86px;
+      height: 86px;
+      background: #ffe0bd;
+      border-radius: 50% 50% 45% 45%;
+      margin: 0 auto 12px;
+      border: 5px solid #d4a373;
+      box-shadow: 0 8px 16px var(--shadow);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .doll-hair {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: 10px;
+      background: #6d4c41;
+      border-radius: 50% 50% 40% 40%;
+      z-index: 1;
+      box-shadow: inset 0 -10px 20px rgba(0,0,0,0.15);
+    }
+
+    .doll-bangs {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      right: 0;
+      height: 26px;
+      background: #6d4c41;
+      z-index: 2;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .doll-face {
+      position: absolute;
+      inset: 18px 18px auto 18px;
+      height: 40px;
+      z-index: 3;
+    }
+
+    .eye {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #3e2723;
+      border-radius: 50%;
+      top: 14px;
+    }
+    .eye.left { left: 22px; }
+    .eye.right { right: 22px; }
+
+    .eye-shine {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+    }
+
+    .blush {
+      position: absolute;
+      width: 16px;
+      height: 11px;
+      background: rgba(255, 105, 135, 0.55);
+      border-radius: 50%;
+      top: 34px;
+      filter: blur(4px);
+      z-index: 3;
+    }
+    .blush.left { left: 12px; transform: scaleX(-1); }
+    .blush.right { right: 12px; }
+
+    .mouth {
+      position: absolute;
+      width: 20px;
+      height: 10px;
+      border: 3px solid #8d6e63;
+      border-top: none;
+      border-radius: 0 0 9px 9px;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .doll-body {
+      width: 110px;
+      height: 120px;
+      background: var(--rose);
+      border-radius: 0 0 38px 38px;
+      margin: 0 auto;
+      position: relative;
+      border: 5px solid #d4a373;
+      border-top: none;
+      box-shadow: 0 8px 16px var(--shadow);
+      overflow: hidden;
+    }
+
+    .doll-dress {
+      position: absolute;
+      width: 64px;
+      height: 42px;
+      background: var(--ink);
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 0 0 18px 18px;
+      border: 4px solid #d4a373;
+      border-top: none;
+    }
+
+    .doll-arm {
+      position: absolute;
+      width: 28px;
+      height: 68px;
+      background: #ffe0bd;
+      border: 4px solid #d4a373;
+      border-radius: 14px;
+      top: 8px;
+    }
+    .doll-arm.left { left: -32px; transform: rotate(-25deg); z-index: 1; }
+    .doll-arm.right { right: -32px; transform: rotate(25deg); z-index: 1; }
+
+    .doll-hand {
+      width: 20px;
+      height: 20px;
+      background: #ffe0bd;
+      border-radius: 50%;
+      border: 4px solid #d4a373;
+      position: absolute;
+      bottom: -13px;
+    }
+    .doll-hand.left { left: -5px; }
+    .doll-hand.right { right: -5px; }
+
+    .doll-legs {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 38px;
+      height: 13px;
+      background: #ffe0bd;
+      border-radius: 7px;
+      border: 4px solid #d4a373;
+      z-index: 1;
+    }
+
+    /* ---------- Envelope ---------- */
+    .envelope-wrap {
+      position: relative;
+      width: 340px;
+      height: 220px;
+      margin-top: 20px;
+      z-index: 20;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .envelope-shadow {
+      position: absolute;
+      bottom: 30px;
+      left: 12px;
+      right: 12px;
+      height: 18px;
+      background: rgba(0,0,0,0.10);
+      border-radius: 50%;
+      filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .envelope-wrap.open .envelope-shadow { opacity: 1; }
+
+    .env-back {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #ffb7ce 0%, #ff9aa2 100%);
+      border-radius: 6px;
+      border: 4px solid var(--rose-dark);
+      z-index: 1;
+      box-shadow: 0 12px 30px var(--shadow);
+      overflow: hidden;
+    }
+
+    .env-pattern {
+      position: absolute;
+      inset: -20%;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.25) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .env-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 52%;
+      background: var(--rose);
+      border: 4px solid var(--rose-dark);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      z-index: 2;
+      transform-origin: top center;
+      transform: rotateX(0deg);
+      transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 14px var(--shadow);
+      position: relative;
+    }
+
+    .env-flap::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: var(--rose-dark);
+      z-index: -1;
+    }
+
+    .envelope-wrap.open .env-flap {
+      transform: rotateX(150deg);
+    }
+
+    .env-front {
+      position: absolute;
+      inset: 5px;
+      background: var(--rose);
+      border: 4px solid var(--rose-dark);
+      border-radius: 6px;
+      z-index: 3;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.06);
+    }
+
+    .env-seal {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 38px;
+      height: 38px;
+      background: var(--rose-dark);
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 4;
+      transition: all 0.6s ease;
+    }
+    .envelope-wrap.open .env-seal {
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+    }
+
+    .env-heart {
+      position: absolute;
+      font-size: 17px;
+      color: var(--rose-dark);
+      opacity: 0.85;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+    }
+    .env-heart.h1 { top: 68px; left: 42px; }
+    .env-heart.h2 { top: 68px; right: 42px; }
+    .env-heart.h3 { bottom: 68px; left: 48px; }
+    .env-heart.h4 { bottom: 68px; right: 48px; }
+
+    /* ---------- Card / Letter ---------- */
+    .card {
+      position: absolute;
+      bottom: -4px;
+      left: 6px;
+      right: 6px;
+      height: 175px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      z-index: 5;
+      box-shadow: 0 14px 35px var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(45px) scale(0.92);
+      transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .envelope-wrap.open .card {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .card-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 1.3rem;
+      color: var(--ink);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      z-index: 7;
+      width: 34px;
+      height: 34px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    .card-close:hover { transform: rotate(90deg); background: rgba(255,255,255,0.9); }
+    .envelope-wrap.open .card-close { opacity: 1; }
+
+    .card-content {
+      max-width: 290px;
+      z-index: 6;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.6s ease;
+    }
+    .envelope-wrap.open .card-content {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.3s;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 12px;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.6);
+    }
+
+    .card-msg {
+      font-size: 1.02rem;
+      color: #6a3b56;
+      line-height: 1.75;
+      margin-bottom: 16px;
+      white-space: pre-line;
+      font-weight: 500;
+    }
+
+    .card-sign {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-top: 6px;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+    }
+
+    /* ---------- Sparkles ---------- */
+    .sparkle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #fff, 0 0 14px #ffd700;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ---------- Hint ---------- */
+    .hint {
+      position: absolute;
+      bottom: 48px;
+      font-size: 0.95rem;
+      color: var(--ink);
+      opacity: 0.8;
+      animation: pulse 2.5s infinite;
+      pointer-events: none;
+      font-weight: 600;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    /* ---------- Confetti ---------- */
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      .envelope-wrap { width: 270px; height: 175px; }
+      .card { height: 145px; padding: 16px; }
+      .card-title { font-size: 1.2rem; }
+      .card-msg { font-size: 0.92rem; }
+      h1 { font-size: 1.7rem; margin-bottom: 6px; }
+      .subtitle { margin-bottom: 30px; }
+      .doll { width: 160px; height: 190px; margin-bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating" id="floating"></div>
+
+  <div class="stage">
+    <h1 id="titleText">For My Love 💖</h1>
+    <div class="subtitle" id="subtitleText">Tap the envelope to open your letter</div>
+
+    <!-- Doll -->
+    <div class="doll">
+      <div class="doll-head">
+        <div class="doll-hair"></div>
+        <div class="doll-bangs"></div>
+        <div class="doll-face">
+          <div class="eye left"><div class="eye-shine"></div></div>
+          <div class="eye right"><div class="eye-shine"></div></div>
+          <div class="blush left"></div>
+          <div class="blush right"></div>
+          <div class="mouth"></div>
+        </div>
+      </div>
+      <div class="doll-body">
+        <div class="doll-arm left"><div class="doll-hand left"></div></div>
+        <div class="doll-arm right"><div class="doll-hand right"></div></div>
+        <div class="doll-dress"></div>
+        <div class="doll-legs"></div>
+      </div>
+    </div>
+
+    <!-- Envelope -->
+    <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Open the love letter">
+      <div class="envelope-shadow"></div>
+      <div class="env-back"><div class="env-pattern"></div></div>
+      <div class="env-flap"></div>
+      <div class="env-front"></div>
+      <div class="env-seal"></div>
+      <div class="env-heart h1">💕</div>
+      <div class="env-heart h2">💕</div>
+      <div class="env-heart h3">💕</div>
+      <div class="env-heart h4">💕</div>
+
+      <div class="card" id="card">
+        <div class="card-close" id="closeCard">✕</div>
+        <div class="card-content">
+          <div class="card-title" id="cardTitle">A Letter for You</div>
+          <div class="card-msg" id="cardMsg">
+            Hi my love,
+
+            Every moment with you feels like a beautiful dream.
+            Thank you for being you, for your smile, and for
+            making my heart feel so full.
+
+            I love you more than words can say ❤️
+          </div>
+          <div class="card-sign" id="cardSign">- With all my heart</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint" id="hint">Tap the envelope to open your letter 💌</div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    /* ============================
+       CUSTOMIZE YOUR TEXT HERE
+       ============================ */
+    const CONFIG = {
+      // Main page title
+      title: "For Nataliaa 💖",
+
+      // Subtitle under title
+      subtitle: "Please Open the Letter",
+
+      // Card title (inside letter)
+      cardTitle: "A Letter for You",
+
+      // Main message (use \n for line breaks)
+      cardMsg: `Hi Nataaa,
+
+Hihi, iseng aja aku buat ini, ini buat kamu yaa bocillkuu, princessku
+kamu mewarnai hari hari ku yaa, jadii tersenyumlah terus seperti biasanyaa.
+
+I love you more than words can say ❤️`,
+
+      // Signature
+      cardSign: "- With all my heart",
+
+      // Hint text below envelope
+      hint: "Tap to Open 💌",
+
+      // Auto-close after X ms (0 = never auto-close)
+      autoCloseMs: 0
+    };
+
+    /* ============================
+       APPLY CUSTOM TEXT
+       ============================ */
+    document.getElementById('titleText').textContent = CONFIG.title;
+    document.getElementById('subtitleText').textContent = CONFIG.subtitle;
+    document.getElementById('cardTitle').textContent = CONFIG.cardTitle;
+    document.getElementById('cardMsg').textContent = CONFIG.cardMsg;
+    document.getElementById('cardSign').textContent = CONFIG.cardSign;
+    document.getElementById('hint').textContent = CONFIG.hint;
+
+    /* ============================
+       FLOATING HEARTS & PETALS
+       ============================ */
+    const floating = document.getElementById('floating');
+    const symbols = ['❤', '💖', '💕', '💗', '💘', '💝', '🌸', '✨'];
+
+    function spawnFloating() {
+      const el = document.createElement('div');
+      el.className = 'floating-item';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = (16 + Math.random() * 24) + 'px';
+      el.style.animationDuration = (4 + Math.random() * 5) + 's';
+      el.style.animationDelay = Math.random() * 3 + 's';
+      floating.appendChild(el);
+      setTimeout(() => el.remove(), 10000);
+    }
+
+    setInterval(spawnFloating, 350);
+    for (let i = 0; i < 14; i++) spawnFloating();
+
+    /* ============================
+       ENVELOPE INTERACTION
+       ============================ */
+    const envelope = document.getElementById('envelope');
+    const card = document.getElementById('card');
+    const closeCard = document.getElementById('closeCard');
+    const hint = document.getElementById('hint');
+    const confetti = document.getElementById('confetti');
+
+    let isOpen = false;
+
+    function openEnvelope() {
+      if (isOpen) return;
+      isOpen = true;
+      envelope.classList.add('open');
+      hint.style.opacity = '0';
+      launchConfetti();
+      startSparkles();
+      if (CONFIG.autoCloseMs > 0) {
+        setTimeout(closeEnvelope, CONFIG.autoCloseMs);
+      }
+    }
+
+    function closeEnvelope() {
+      if (!isOpen) return;
+      isOpen = false;
+      envelope.classList.remove('open');
+      hint.style.opacity = '0.8';
+      stopSparkles();
+    }
+
+    envelope.addEventListener('click', openEnvelope);
+    envelope.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnvelope(); }
+    });
+
+    closeCard.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeEnvelope();
+    });
+
+    /* ============================
+       CONFETTI
+       ============================ */
+    function launchConfetti() {
+      const colors = ['#ff8fab', '#ffb7ce', '#ffd1dc', '#d4af37', '#ff9aa2', '#ffe0bd'];
+      const count = 70;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.style.position = 'absolute';
+        p.style.left = '50%';
+        p.style.top = '50%';
+        p.style.width = (5 + Math.random() * 7) + 'px';
+        p.style.height = (5 + Math.random() * 7) + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        p.style.transform = 'translate(-50%, -50%)';
+        p.style.opacity = 0.9;
+        confetti.appendChild(p);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 50 + Math.random() * 130;
+        const tx = Math.cos(angle) * velocity + 'px';
+        const ty = Math.sin(angle) * velocity + 'px';
+
+        p.animate([
+          { transform: 'translate(-50%, -50%) translate(0,0) scale(1)', opacity: 0.9 },
+          { transform: `translate(-50%, -50%) translate(${tx}, ${ty}) scale(0)`, opacity: 0 }
+        ], {
+          duration: 1100 + Math.random() * 900,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+        }).onfinish = () => p.remove();
+      }
+    }
+
+    /* Sparkles inside opened card */
+    let sparkleInterval;
+    function startSparkles() {
+      sparkleInterval = setInterval(() => {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        card.appendChild(s);
+        s.animate([
+          { opacity: 0, transform: 'scale(0)' },
+          { opacity: 1, transform: 'scale(1.3)' },
+          { opacity: 0, transform: 'scale(0)' }
+        ], { duration: 900 + Math.random() * 700, easing: 'ease-in-out' }).onfinish = () => s.remove();
+      }, 200);
+    }
+    function stopSparkles() {
+      clearInterval(sparkleInterval);
+    }
+
+    /* ESC to close */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) closeEnvelope();
+    });
+  </script>
+</body>
+</html>
